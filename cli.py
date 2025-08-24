@@ -22,7 +22,7 @@ def cmd_simulate(args: argparse.Namespace) -> None:
     deck = load_deck(Path(args.deck))
     horde = load_cards(Path(args.horde))
     seeds = range(args.seeds)
-    metrics = run(deck, seeds, horde)
+    metrics = run(deck, seeds, horde, logfile=args.logfile)
     print(json.dumps(metrics, indent=2))
 
 
@@ -39,6 +39,7 @@ def main() -> None:
     sim_p.add_argument("--deck", required=True)
     sim_p.add_argument("--horde", required=True)
     sim_p.add_argument("--seeds", type=int, default=10)
+    sim_p.add_argument("--logfile")
     sim_p.set_defaults(func=cmd_simulate)
 
     opt_p = sub.add_parser("optimize")
