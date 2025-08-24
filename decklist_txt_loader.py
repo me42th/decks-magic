@@ -1,7 +1,19 @@
 import json
 from pathlib import Path
 from typing import List, Optional, Tuple
-import requests
+from types import SimpleNamespace
+
+try:  # pragma: no cover - exercised via tests with monkeypatch
+    import requests as _requests
+except Exception:  # requests may not be installed in minimal environments
+    _requests = None
+
+# ``requests`` is exposed as a module-level object so that tests (and callers)
+# can monkeypatch ``requests.get`` even if the real library isn't available.
+def _missing_requests_get(*args, **kwargs):  # pragma: no cover - simple fallback
+    raise RuntimeError("requests library is required to fetch card data")
+
+requests = _requests or SimpleNamespace(get=_missing_requests_get)
 
 from engine.cards import Card
 from engine.deck import Deck

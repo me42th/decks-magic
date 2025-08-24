@@ -1,8 +1,11 @@
+import json
 import random
+from pathlib import Path
 from typing import List
 
 from engine.cards import Card
 from engine.deck import Deck
+from sim.runner import run, load_seed_bank
 from .fitness import compute_fitness
 from .constraints import constraint_penalty
 
@@ -26,19 +29,27 @@ forest_card = Card(
 )
 
 
+def _load_horde_cards() -> List[Card]:
+    path = Path("data/horde_basic.json")
+    data = json.loads(path.read_text())
+    return [Card(**item) for item in data]
+
+
+SEEDS = load_seed_bank(Path("sim/seed_bank.json"))[:5]
+HORDE_CARDS = _load_horde_cards()
+
+
 def init_population(p: int) -> List[Deck]:
     decklist = [sample_card] * 4 + [forest_card] * 56
     return [Deck(decklist) for _ in range(p)]
 
 
 def evaluate(deck: Deck) -> dict:
-    # Placeholder evaluation that returns random metrics
-    return {
-        "winrate": random.random(),
-        "avg_turns": random.uniform(5, 10),
-        "avg_damage": random.uniform(0, 20),
-        "penalties": constraint_penalty(deck),
-    }
+    """Simulate ``deck`` against the basic Horde and compute metrics."""
+
+    metrics = run(deck, SEEDS, HORDE_CARDS)
+    metrics["penalties"] = constraint_penalty(deck)
+    return metrics
 
 
 def search_ga(pop: int, generations: int) -> Deck:

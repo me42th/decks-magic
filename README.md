@@ -1,6 +1,13 @@
 # decks-magic
 
-Skeleton MVP for a Magic: The Gathering Horde simulator and optimizer.
+Minimal Magic: The Gathering "Horde" simulator and deck optimiser.  The code is
+deliberately small but demonstrates a complete flow:
+
+* a micro game engine with a deterministic autoplayer,
+* Horde rules where damage to the Horde mills its library,
+* a toy genetic algorithm that evaluates decks by simulating games, and
+* a loader for plain-text deck lists using the MTG API (it falls back gracefully
+  if the `requests` package is not installed).
 
 ## Setup
 

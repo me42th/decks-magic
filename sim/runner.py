@@ -6,10 +6,8 @@ from typing import Iterable, List
 from engine.cards import Card
 from engine.deck import Deck
 from engine.game import GameState
-from engine.horde_rules import play_horde_turn
-
-
-CARD_SAMPLE = Card("token", "Zombie Token", 0, ["Token", "Creature", "Zombie"], [], (2, 2))
+from engine.autoplayer import play_player_turn
+from engine.horde_rules import play_horde_turn, mill
 
 
 def load_seed_bank(path: Path) -> List[int]:
@@ -23,20 +21,21 @@ def run_game(
     state = GameState(library=list(deck.cards), life=20)
     horde_lib = list(horde)
     events = []
+
     # Play three turns as placeholder
     for _ in range(3):
-        if state.library:
-            drawn = state.library.pop(0)
-            state.hand.append(drawn)
-            events.append({"event": "draw", "card": drawn.name})
-        if state.hand:
-            played = state.hand.pop(0)
-            state.battlefield.append(played)
-            events.append({"event": "play", "card": played.name})
+        events.extend(play_player_turn(state))
+
+        # Player creatures always attack; damage mills the Horde library
+        player_power = sum(card.pt[0] for card in state.battlefield if card.pt)
+        mill(horde_lib, player_power)
+        events.append({"event": "player_attack", "damage": player_power, "horde_size": len(horde_lib)})
+
         life_before = state.life
         play_horde_turn(state, horde_lib, rng)
         damage = life_before - state.life
         events.append({"event": "horde_attack", "damage": damage, "life": state.life})
+
     if logfile:
         Path(logfile).write_text(json.dumps(events, indent=2))
     return {"won": state.life > 0, "life": state.life, "turns": 3}
