@@ -9,58 +9,59 @@ from sim.runner import run
 from opt.search_ga import search_ga
 
 
-def load_cards(path: Path) -> List[Card]:
-    suffix = path.suffix.lower()
-    if suffix == ".json":
-        data = json.loads(path.read_text())
-        return [Card(**item) for item in data]
-    elif suffix == ".txt":
-        from decklist_txt_loader import load_deck as load_txt_deck
+def carregar_cartas(caminho: Path) -> List[Card]:
+    sufixo = caminho.suffix.lower()
+    if sufixo == ".json":
+        dados = json.loads(caminho.read_text())
+        # Compreensão de lista com desempacotamento ``**`` de dicionário, algo inexistente em PHP.
+        return [Card(**item) for item in dados]
+    elif sufixo == ".txt":
+        from decklist_txt_loader import carregar_baralho as carregar_baralho_txt
 
-        return load_txt_deck(path).cards
+        return carregar_baralho_txt(caminho).cards
     else:
-        raise ValueError(f"Unsupported deck format: {suffix}")
+        raise ValueError(f"Formato de baralho não suportado: {sufixo}")
 
 
-def load_deck(path: Path) -> Deck:
-    return Deck(load_cards(path))
+def carregar_baralho(caminho: Path) -> Deck:
+    return Deck(carregar_cartas(caminho))
 
 
-def cmd_simulate(args: argparse.Namespace) -> None:
-    deck = load_deck(Path(args.deck))
-    horde = load_cards(Path(args.horde))
-    seeds = range(args.seeds)
-    metrics = run(deck, seeds, horde, logfile=args.logfile)
-    print(json.dumps(metrics, indent=2))
+def comando_simular(argumentos: argparse.Namespace) -> None:
+    baralho = carregar_baralho(Path(argumentos.deck))
+    horda = carregar_cartas(Path(argumentos.horde))
+    sementes = range(argumentos.seeds)  # ``range`` cria um iterador sem gerar uma lista inteira.
+    metricas = run(baralho, sementes, horda, logfile=argumentos.logfile)
+    print(json.dumps(metricas, indent=2))
 
 
-def cmd_optimize(args: argparse.Namespace) -> None:
-    best = search_ga(args.pop, args.gens)
-    print(f"Best deck has {len(best.cards)} cards")
+def comando_otimizar(argumentos: argparse.Namespace) -> None:
+    melhor = search_ga(argumentos.pop, argumentos.gens)
+    print(f"Melhor baralho possui {len(melhor.cards)} cartas")
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description="MTG Horde Lab MVP")
-    sub = parser.add_subparsers(dest="cmd")
+def principal() -> None:
+    analisador = argparse.ArgumentParser(description="MTG Horde Lab MVP")
+    subcomandos = analisador.add_subparsers(dest="cmd")
 
-    sim_p = sub.add_parser("simulate")
-    sim_p.add_argument("--deck", required=True)
-    sim_p.add_argument("--horde", required=True)
-    sim_p.add_argument("--seeds", type=int, default=10)
-    sim_p.add_argument("--logfile")
-    sim_p.set_defaults(func=cmd_simulate)
+    parser_simular = subcomandos.add_parser("simulate")
+    parser_simular.add_argument("--deck", required=True)
+    parser_simular.add_argument("--horde", required=True)
+    parser_simular.add_argument("--seeds", type=int, default=10)
+    parser_simular.add_argument("--logfile")
+    parser_simular.set_defaults(func=comando_simular)
 
-    opt_p = sub.add_parser("optimize")
-    opt_p.add_argument("--pop", type=int, default=30)
-    opt_p.add_argument("--gens", type=int, default=5)
-    opt_p.set_defaults(func=cmd_optimize)
+    parser_otimizar = subcomandos.add_parser("optimize")
+    parser_otimizar.add_argument("--pop", type=int, default=30)
+    parser_otimizar.add_argument("--gens", type=int, default=5)
+    parser_otimizar.set_defaults(func=comando_otimizar)
 
-    args = parser.parse_args()
-    if hasattr(args, "func"):
-        args.func(args)
+    argumentos = analisador.parse_args()
+    if hasattr(argumentos, "func"):
+        argumentos.func(argumentos)
     else:
-        parser.print_help()
+        analisador.print_help()
 
 
 if __name__ == "__main__":
-    main()
+    principal()
