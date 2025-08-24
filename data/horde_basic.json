@@ -1,0 +1,20 @@
+[
+  {
+    "id": "token_zombie",
+    "name": "Zombie Token",
+    "cmc": 0,
+    "types": ["Token", "Creature", "Zombie"],
+    "colors": [],
+    "pt": [2, 2],
+    "text_dsl": ""
+  },
+  {
+    "id": "sample",
+    "name": "Sample Creature",
+    "cmc": 1,
+    "types": ["Creature"],
+    "colors": ["C"],
+    "pt": [1, 1],
+    "text_dsl": ""
+  }
+]
