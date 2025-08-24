@@ -10,8 +10,16 @@ from opt.search_ga import search_ga
 
 
 def load_cards(path: Path) -> List[Card]:
-    data = json.loads(path.read_text())
-    return [Card(**item) for item in data]
+    suffix = path.suffix.lower()
+    if suffix == ".json":
+        data = json.loads(path.read_text())
+        return [Card(**item) for item in data]
+    elif suffix == ".txt":
+        from decklist_txt_loader import load_deck as load_txt_deck
+
+        return load_txt_deck(path).cards
+    else:
+        raise ValueError(f"Unsupported deck format: {suffix}")
 
 
 def load_deck(path: Path) -> Deck:
