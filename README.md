@@ -1,44 +1,67 @@
 # decks-magic
 
-Minimal Magic: The Gathering "Horde" simulator and deck optimiser.  The code is
-deliberately small but demonstrates a complete flow:
+Projeto base para estudo e manutenção de um simulador "Horde" de Magic: The Gathering.
+O código é deliberadamente pequeno, mas demonstra um fluxo completo:
 
 * a micro game engine with a deterministic autoplayer,
 * Horde rules where damage to the Horde mills its library,
 * a toy genetic algorithm that evaluates decks by simulating games, and
 * a loader for plain-text deck lists using the MTG API (it falls back gracefully
   if the `requests` package is not installed).
+## Instalação rápida
 
-## Setup
+Requer Python 3.10+.
 
-Requires Python 3.10+.
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install requests fastapi pytest
+```
 
-## CLI
+## Uso
 
-The command-line interface accepts deck and horde lists in JSON or plain text
-formats. When a `.txt` deck list is used, card details are fetched from the
-Magic: The Gathering API.
-
-Simulate a deck against the basic Horde:
+Simular um baralho contra a horda básica:
 
 ```bash
 python cli.py simulate --deck data/sample_deck.json --horde data/horde_basic.json --seeds 5
 ```
 
-Simulate using a text deck list and log each game to a file:
+Simular usando uma lista em texto e registrar cada jogo:
 
 ```bash
 python cli.py simulate --deck doctorWho_commander.txt --horde data/horde_basic.json --seeds 5 --logfile game.log
 ```
 
-Run the (toy) genetic algorithm optimizer:
+Executar o otimizador genético:
 
 ```bash
 python cli.py optimize --pop 5 --gens 2
 ```
 
-## Tests
+## Testes
 
 ```bash
 pytest
 ```
+
+## Contribuição
+
+1. Faça um fork e crie um branch.
+2. Execute `pytest` antes de enviar.
+3. Abra um pull request descrevendo as mudanças.
+
+## Publicação
+
+Ainda não há pipeline de publicação. Um fluxo mínimo seria:
+
+```bash
+python -m build
+```
+
+## Documentação
+
+Consulte [books/BOOK-731.md](books/BOOK-731.md) para detalhes completos do projeto.
+
+## Licença
+
+Nenhuma licença definida. Recomenda-se MIT.
