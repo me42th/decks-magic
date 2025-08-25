@@ -1,44 +1,64 @@
 # decks-magic
 
-Minimal Magic: The Gathering "Horde" simulator and deck optimiser.  The code is
-deliberately small but demonstrates a complete flow:
+Simulador mínimo de Magic: The Gathering no formato Horde. O repositório serve como base de estudo e manutenção do código.
 
-* a micro game engine with a deterministic autoplayer,
-* Horde rules where damage to the Horde mills its library,
-* a toy genetic algorithm that evaluates decks by simulating games, and
-* a loader for plain-text deck lists using the MTG API (it falls back gracefully
-  if the `requests` package is not installed).
+## Requisitos
 
-## Setup
+- Python 3.10+
+- Dependências opcionais: `requests` para buscar cartas em decklists `.txt` e `fastapi` para o endpoint `api/`.
 
-Requires Python 3.10+.
+## Setup rápido
 
-## CLI
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt  # inexistente; instale as libs manualmente
+```
 
-The command-line interface accepts deck and horde lists in JSON or plain text
-formats. When a `.txt` deck list is used, card details are fetched from the
-Magic: The Gathering API.
+## Como rodar
 
-Simulate a deck against the basic Horde:
+Simular um baralho contra a horda básica:
 
 ```bash
 python cli.py simulate --deck data/sample_deck.json --horde data/horde_basic.json --seeds 5
 ```
 
-Simulate using a text deck list and log each game to a file:
+Com decklist em texto e log em arquivo:
 
 ```bash
 python cli.py simulate --deck doctorWho_commander.txt --horde data/horde_basic.json --seeds 5 --logfile game.log
 ```
 
-Run the (toy) genetic algorithm optimizer:
+Rodar o otimizador genético:
 
 ```bash
 python cli.py optimize --pop 5 --gens 2
 ```
 
-## Tests
+## Testes
 
 ```bash
 pytest
 ```
+
+## Qualidade de código
+
+Não há linter ou formatter configurado. Recomenda-se `black`, `ruff` e `mypy`.
+
+## Contribuição
+
+- Crie branches a partir de `main`.
+- Adicione testes para novos recursos.
+- Envie pull requests curtos e com mensagens de commit objetivas.
+
+## Publicação
+
+Ainda não há `pyproject.toml` ou processo de build. Consulte o livro para um exemplo mínimo.
+
+## Licença
+
+Nenhuma licença foi fornecida; defina uma antes de publicar.
+
+## Documentação
+
+Leia [books/BOOK-137.md](books/BOOK-137.md) para detalhes completos.
