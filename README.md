@@ -1,44 +1,65 @@
 # decks-magic
 
-Minimal Magic: The Gathering "Horde" simulator and deck optimiser.  The code is
-deliberately small but demonstrates a complete flow:
+Base de estudo e manutenção de um simulador mínimo de Magic: The Gathering no
+formato Horde. O código demonstra um fluxo completo:
 
-* a micro game engine with a deterministic autoplayer,
-* Horde rules where damage to the Horde mills its library,
-* a toy genetic algorithm that evaluates decks by simulating games, and
-* a loader for plain-text deck lists using the MTG API (it falls back gracefully
-  if the `requests` package is not installed).
+* motor de jogo com autoplayer determinístico;
+* regras de Horde onde dano mói o grimório;
+* algoritmo genético simples para avaliar baralhos; e
+* carregamento de listas de cartas em texto puro via MTG API (funciona sem o
+  pacote `requests`).
 
-## Setup
+## Objetivo
 
-Requires Python 3.10+.
+Servir como laboratório para experimentos de simulação e para práticas de
+manutenção de código.
 
-## CLI
+## Instalação rápida
 
-The command-line interface accepts deck and horde lists in JSON or plain text
-formats. When a `.txt` deck list is used, card details are fetched from the
-Magic: The Gathering API.
+Requer Python 3.10+. Em um diretório vazio:
 
-Simulate a deck against the basic Horde:
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install requests fastapi pytest
+```
+
+## Como executar
+
+Interface de linha de comando (`cli.py`):
 
 ```bash
 python cli.py simulate --deck data/sample_deck.json --horde data/horde_basic.json --seeds 5
-```
-
-Simulate using a text deck list and log each game to a file:
-
-```bash
 python cli.py simulate --deck doctorWho_commander.txt --horde data/horde_basic.json --seeds 5 --logfile game.log
-```
-
-Run the (toy) genetic algorithm optimizer:
-
-```bash
 python cli.py optimize --pop 5 --gens 2
 ```
 
-## Tests
+## Como testar
 
 ```bash
 pytest
 ```
+
+## Qualidade de código
+
+Ferramentas de lint não estão configuradas. Recomenda-se `ruff`, `black` e
+`pre-commit`.
+
+## Contribuição
+
+1. Crie branch a partir de `main`.
+2. Adicione testes cobrindo as mudanças.
+3. Abra PR descrevendo o impacto.
+
+## Publicação
+
+Ainda não há `pyproject.toml`. Consulte `books/BOOK-645.md` para roteiro de
+empacotamento e distribuição.
+
+## Licença
+
+Nenhum arquivo de licença foi definido.
+
+## Documentação adicional
+
+Livro com detalhes do projeto: [`books/BOOK-645.md`](books/BOOK-645.md).
