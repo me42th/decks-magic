@@ -1,4 +1,4 @@
-# decks-magic
+# Python can be Magic
 
 Base de estudo e manutenção de um simulador mínimo de Magic: The Gathering no
 formato Horde. O código demonstra um fluxo completo:
@@ -18,15 +18,21 @@ manutenção de código.
 
 Requer Python 3.10+. Em um diretório vazio:
 
+
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install requests fastapi pytest
 ```
 
-## Como executar
+Com decklist em texto e log em arquivo:
+
+```bash
+python cli.py simulate --deck doctorWho_commander.txt --horde data/horde_basic.json --seeds 5 --logfile game.log
+```
 
 Interface de linha de comando (`cli.py`):
+
 
 ```bash
 python cli.py simulate --deck data/sample_deck.json --horde data/horde_basic.json --seeds 5
@@ -34,13 +40,16 @@ python cli.py simulate --deck doctorWho_commander.txt --horde data/horde_basic.j
 python cli.py optimize --pop 5 --gens 2
 ```
 
-## Como testar
+
+## Testes
+
 
 ```bash
 pytest
 ```
 
 ## Qualidade de código
+
 
 Ferramentas de lint não estão configuradas. Recomenda-se `ruff`, `black` e
 `pre-commit`.
@@ -63,3 +72,4 @@ Nenhum arquivo de licença foi definido.
 ## Documentação adicional
 
 Livro com detalhes do projeto: [`books/BOOK-645.md`](books/BOOK-645.md).
+
