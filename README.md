@@ -72,4 +72,3 @@ Nenhum arquivo de licença foi definido.
 ## Documentação adicional
 
 Livro com detalhes do projeto: [`books/BOOK-645.md`](books/BOOK-645.md).
-
