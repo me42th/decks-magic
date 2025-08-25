@@ -1,26 +1,28 @@
-# decks-magic
+# Python can be Magic
 
-Simulador mínimo de Magic: The Gathering no formato Horde. O repositório serve como base de estudo e manutenção do código.
+Base de estudo e manutenção de um simulador mínimo de Magic: The Gathering no
+formato Horde. O código demonstra um fluxo completo:
 
-## Requisitos
+* motor de jogo com autoplayer determinístico;
+* regras de Horde onde dano mói o grimório;
+* algoritmo genético simples para avaliar baralhos; e
+* carregamento de listas de cartas em texto puro via MTG API (funciona sem o
+  pacote `requests`).
 
-- Python 3.10+
-- Dependências opcionais: `requests` para buscar cartas em decklists `.txt` e `fastapi` para o endpoint `api/`.
+## Objetivo
 
-## Setup rápido
+Servir como laboratório para experimentos de simulação e para práticas de
+manutenção de código.
+
+## Instalação rápida
+
+Requer Python 3.10+. Em um diretório vazio:
+
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt  # inexistente; instale as libs manualmente
-```
-
-## Como rodar
-
-Simular um baralho contra a horda básica:
-
-```bash
-python cli.py simulate --deck data/sample_deck.json --horde data/horde_basic.json --seeds 5
+pip install requests fastapi pytest
 ```
 
 Com decklist em texto e log em arquivo:
@@ -29,13 +31,18 @@ Com decklist em texto e log em arquivo:
 python cli.py simulate --deck doctorWho_commander.txt --horde data/horde_basic.json --seeds 5 --logfile game.log
 ```
 
-Rodar o otimizador genético:
+Interface de linha de comando (`cli.py`):
+
 
 ```bash
+python cli.py simulate --deck data/sample_deck.json --horde data/horde_basic.json --seeds 5
+python cli.py simulate --deck doctorWho_commander.txt --horde data/horde_basic.json --seeds 5 --logfile game.log
 python cli.py optimize --pop 5 --gens 2
 ```
 
+
 ## Testes
+
 
 ```bash
 pytest
@@ -43,22 +50,26 @@ pytest
 
 ## Qualidade de código
 
-Não há linter ou formatter configurado. Recomenda-se `black`, `ruff` e `mypy`.
+
+Ferramentas de lint não estão configuradas. Recomenda-se `ruff`, `black` e
+`pre-commit`.
 
 ## Contribuição
 
-- Crie branches a partir de `main`.
-- Adicione testes para novos recursos.
-- Envie pull requests curtos e com mensagens de commit objetivas.
+1. Crie branch a partir de `main`.
+2. Adicione testes cobrindo as mudanças.
+3. Abra PR descrevendo o impacto.
 
 ## Publicação
 
-Ainda não há `pyproject.toml` ou processo de build. Consulte o livro para um exemplo mínimo.
+Ainda não há `pyproject.toml`. Consulte `books/BOOK-645.md` para roteiro de
+empacotamento e distribuição.
 
 ## Licença
 
-Nenhuma licença foi fornecida; defina uma antes de publicar.
+Nenhum arquivo de licença foi definido.
 
-## Documentação
+## Documentação adicional
 
-Leia [books/BOOK-137.md](books/BOOK-137.md) para detalhes completos.
+Livro com detalhes do projeto: [`books/BOOK-645.md`](books/BOOK-645.md).
+
